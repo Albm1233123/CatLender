@@ -134,3 +134,23 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Backend compiled JS (if no separate outDir is set)
+backend/**/*.js
+backend/**/*.js.map
+backend/**/*.d.ts
+
+# Frontend build
+frontend/build/
+
+# Local Postgres (if you're using Supabase CLI or local DB)
+pgdata/
+
+# Test output
+jest-cache/
+jest-test-results.json
+
+# Editor configs
+.vscode/
+.idea/
+*.code-workspace
