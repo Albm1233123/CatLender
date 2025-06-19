@@ -66,6 +66,7 @@ async function login(req: Request, res: Response): Promise<void> {
 
     try {
         const { email, password } = req.body;
+        console.log('Login body:', req.body); 
 
         if (!email || !password) {
         res.status(400).json({ error: 'Please fill in all fields' });
@@ -77,6 +78,8 @@ async function login(req: Request, res: Response): Promise<void> {
         .select('email, password_hash')
         .eq('email', email)
         .single();
+        
+        console.log('Supabase result:', { data, error });
 
         if (error || !data) {
         res.status(400).json({ error: 'Invalid email or password' });
