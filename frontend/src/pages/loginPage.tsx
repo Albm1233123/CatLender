@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { Box, TextField, Typography, Button, Divider, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
 
@@ -9,6 +10,7 @@ function LoginPage() {
   const[password, setPassword] = useState('');
   const[isLogin, setIsLogin] = useState(true);
   const [statusMessage, setStatusMessage] = useState('');
+  const navigate = useNavigate();
 
   // Login func
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,7 +31,9 @@ function LoginPage() {
       if(response.ok) {
         console.log('Succussful login', result);
         setStatusMessage('Logged in successfully!');
-        // navigate to landing page
+        localStorage.setItem('token', result.token || '');
+        localStorage.setItem('firstName', result.firstName || '');
+        navigate('/landingPage');
       } else {
         console.error('Login failed:', result.error);
         setStatusMessage('Logged in failed');
