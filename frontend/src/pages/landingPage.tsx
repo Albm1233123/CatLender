@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Typography, Button, Divider, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../components/navbar';
+import SideBar from '../components/sidebar';
 
 function LandingPage() {
     const[isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,15 +37,19 @@ function LandingPage() {
         navigate('/');
     }
 
+    const theme = useTheme();
+
     return (
+        <><NavBar
+            isLoggedIn={isLoggedIn}
+            firstName={firstName}
+            onLogout={logout}
+        ></NavBar>
+        <SideBar/>
+    
         <Box>
-            {isLoggedIn ? 
-            <>
-                <Typography>Welcome back, {firstName}!</Typography>
-                <Button onClick={logout}>Log out</Button>
-            </> : 
-                <Typography>Please log in</Typography>}
-        </Box>
+                
+        </Box></>
     );
 }
 

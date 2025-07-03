@@ -77,7 +77,7 @@ async function login(req: Request, res: Response): Promise<void> {
         .from('users')
         .select('email, password_hash')
         .eq('email', email)
-        .single();
+        .single();0
         
         console.log('Supabase result:', { data, error });
 
