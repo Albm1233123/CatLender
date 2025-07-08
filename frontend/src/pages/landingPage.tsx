@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/navbar';
 import SideBar from '../components/sidebar';
 import CatSelector from '../components/catSelector';
+import CatCalendar from '../components/calender'; 
 
 // placeholder
 import dogPlaceholder from '../assets/dogPlaceholder.png';
@@ -17,10 +18,17 @@ const dummyCats = [
   { id: 3, name: 'KitKat', age: 2, breed: 'Bengal', gender: 'male', avatar: noSmile }
 ];
 
+const dummyEvents = [
+    { id: 1, catId: 1, title: 'Vet Visit', date: '2025-07-08', type: 'Medical', notes: 'Annual checkup' },
+    { id: 2, catId: 2, title: 'Grooming', date: '2025-07-08', type: 'Care' },
+    { id: 3, catId: 3, title: 'Playdate', date: '2025-07-09', type: 'Fun' }
+  ];
+
 function LandingPage() {
     const[isLoggedIn, setIsLoggedIn] = useState(false);
     const[firstName, setFirstName] = useState('');
     const [selectedCat, setSelectedCat] = useState(dummyCats[0]);
+    const filteredEvents = dummyEvents.filter(event => event.catId === selectedCat.id);
     const navigate = useNavigate();
 
     // Check if user is logged in
@@ -96,10 +104,12 @@ function LandingPage() {
                 </Box>
 
                 {/*Calender analytics*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>Calender or data box</Box>
+                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>Calender or data box
+                    <CatCalendar events={filteredEvents} />
+                </Box>
 
                 {/*Events*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Events today</Box>
+                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Up coming events</Box>
 
                 {/*Other cats or something else*/}
                 <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Card 4</Box>
