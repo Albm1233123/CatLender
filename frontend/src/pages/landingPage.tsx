@@ -3,10 +3,24 @@ import { Box, TextField, Typography, Button, Divider, useTheme, Grid, Paper, sty
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../components/navbar';
 import SideBar from '../components/sidebar';
+import CatSelector from '../components/catSelector';
+
+// placeholder
+import dogPlaceholder from '../assets/dogPlaceholder.png';
+import cat from '../assets/cat.png';
+import noSmile from '../assets/noSmile.png';
+
+// placeholder
+const dummyCats = [
+  { id: 1, name: 'Dog', age: 1, breed: 'Siamese', gender: 'cat', avatar: dogPlaceholder },
+  { id: 2, name: 'Mittens', age: 3, breed: 'Maine Coon', gender: 'female', avatar: cat },
+  { id: 3, name: 'KitKat', age: 2, breed: 'Bengal', gender: 'male', avatar: noSmile }
+];
 
 function LandingPage() {
     const[isLoggedIn, setIsLoggedIn] = useState(false);
     const[firstName, setFirstName] = useState('');
+    const [selectedCat, setSelectedCat] = useState(dummyCats[0]);
     const navigate = useNavigate();
 
     // Check if user is logged in
@@ -61,13 +75,31 @@ function LandingPage() {
                 }}
                 >
                 {/*Cat profile*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Card 1</Box>
+                <Box sx={{ flex: '1 1 100px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>
+                    Cat object selection
+                    <Box sx={{ mt: 2, textAlign: 'center' }}>
+                        <img
+                            src={selectedCat.avatar}
+                            alt={selectedCat.name}
+                            style={{ width: '60%', borderRadius: '8px' }}
+                        />
+                        <Typography variant="h6" mt={2}>{selectedCat.name}</Typography>
+                        <Typography>Age: {selectedCat.age}</Typography>
+                        <Typography>Breed: {selectedCat.breed}</Typography>
+                        <Typography>Gender: {selectedCat.gender}</Typography>
+                    </Box>
+                    <CatSelector
+                        cats={dummyCats}
+                        selectedCat={selectedCat}
+                        setSelectedCat={setSelectedCat}
+                        />
+                </Box>
 
                 {/*Calender analytics*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>Card 2</Box>
+                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>Calender or data box</Box>
 
                 {/*Events*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Card 3</Box>
+                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Events today</Box>
 
                 {/*Other cats or something else*/}
                 <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Card 4</Box>
