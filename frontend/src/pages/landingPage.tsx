@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Typography, Button, Divider, useTheme, Grid, Paper, styled} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+// components
 import NavBar from '../components/navbar';
 import SideBar from '../components/sidebar';
 import CatSelector from '../components/catSelector';
 import CatCalendar from '../components/calender'; 
+import CatEvents from '../components/events';
 
 // placeholder
 import dogPlaceholder from '../assets/dogPlaceholder.png';
@@ -23,6 +26,25 @@ const dummyEvents = [
     { id: 2, catId: 2, title: 'Grooming', date: '2025-07-08', type: 'Care' },
     { id: 3, catId: 3, title: 'Playdate', date: '2025-07-09', type: 'Fun' }
   ];
+
+  const myEvents = [
+    {
+      id: 1,
+      catId: 1,
+      title: "Vet Visit",
+      date: "2025-07-10",
+      type: "Health",
+      notes: "Routine checkup"
+    },
+    {
+      id: 2,
+      catId: 2,
+      title: "Birthday",
+      date: "2025-08-01",
+      type: "Celebration"
+    }
+  ];
+
 
 function LandingPage() {
     const[isLoggedIn, setIsLoggedIn] = useState(false);
@@ -109,7 +131,9 @@ function LandingPage() {
                 </Box>
 
                 {/*Events*/}
-                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Up coming events</Box>
+                <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Up coming events
+                    <CatEvents events={myEvents} />
+                </Box>
 
                 {/*Other cats or something else*/}
                 <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1}}>Card 4</Box>
