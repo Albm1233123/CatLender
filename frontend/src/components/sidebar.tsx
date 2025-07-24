@@ -13,16 +13,18 @@ import {
   useTheme
 } from '@mui/material';
 import {ArrowLeftOutlined, ArrowRightOutlined,Event, Dashboard, CalendarToday, Pets, } from '@mui/icons-material';
+import catsPage from '../pages/catsPage';
+import LandingPage from '../pages/landingPage';
 
 function SideBar() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true); 
 
   const menuItems = [
-  { text: 'Dashboard', icon: <Dashboard /> },
+  { text: 'Dashboard', icon: <Dashboard />, path: '/LandingPage'},
   { text: 'Calender', icon: <CalendarToday /> },
   { text: 'Events', icon: <Event /> },
-  { text: 'Cats', icon: <Pets /> },
+  { text: 'Cats', icon: <Pets />, path: '/catsPage' },
 ];
 
   const toggleDrawer = () => {
@@ -59,7 +61,7 @@ function SideBar() {
       <Divider />
 
       <List>
-        {menuItems.map(({ text, icon }) => (
+        {menuItems.map(({ text, icon, path }) => (
           <ListItem key={text} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{
@@ -67,6 +69,7 @@ function SideBar() {
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
               }}
+              onClick={() => path && navigate(path)}
             >
               <ListItemIcon
                 sx={{
