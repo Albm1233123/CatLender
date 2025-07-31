@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import userRoutes from './src/routes/userRoutes'
+import catRoutes from './src/routes/catRoutes';
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // mounting routes
 app.use('/api/user', userRoutes);
+app.use('/api/cats', catRoutes);
 
 const PORT = process.env.PORT;
 

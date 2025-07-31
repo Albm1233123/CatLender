@@ -22,7 +22,9 @@ const dummyCats = [
 function CatsPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [firstName, setFirstName] = useState('');
+    const [catForm, setCatForm] = useState({ name: '', age: '', breed: '', gender: '' });
     const [selectedCat, setSelectedCat] = useState(dummyCats[0]);
+    const [statusMessage, setStatusMessage] = useState('');
     const navigate = useNavigate();
 
     // Check if user is logged in
@@ -38,6 +40,41 @@ function CatsPage() {
             setFirstName(name);
         }
     }, []);
+
+    // handle setCatForm change
+    const handleCatFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCatForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleCatSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatusMessage(''); 
+
+        if(!catForm.name || !catForm.age || !catForm.breed || !catForm.gender) {
+            return;
+        }
+
+        try{
+            const response = await fetch('http://localhost:3001/api/cats/addCat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(catForm),
+            });
+
+            if(response.ok) {
+                setStatusMessage('Cat added!');
+            } else {
+                setStatusMessage('Cat addition failed');
+            }
+
+        } catch (error) {
+            console.error('Error adding cat:', error);
+        }
+    }
 
     const logout = () => {
         localStorage.removeItem("token");
@@ -99,14 +136,20 @@ function CatsPage() {
                 {/* Cat form */}
                 <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>Cat form
                     <Typography>Name</Typography>
-                    <TextField label="Enter Name"/>
+                    <TextField label="Enter Name" name="name" value={catForm.name} onChange={handleCatFormChange}/>
                     <Typography>Age</Typography>
-                    <TextField label="Enter age"/>
+                    <TextField label="Enter age" name="age" value={catForm.age} onChange={handleCatFormChange}/>
                     <Typography>Breed</Typography>
-                    <TextField label="Enter Name"/>
+                    <TextField label="Enter Breed" name="breed" value={catForm.breed} onChange={handleCatFormChange}/>
                     <Typography>Gender</Typography>
-                    <TextField label="Enter Gender"/>
-                    <Button sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.common.white}}>Add Cat</Button>
+                    <TextField label="Enter Gender" name="gender" value={catForm.gender} onChange={handleCatFormChange}/>
+                    <Button onClick={handleCatSubmit} sx={{ backgroundColor: theme.palette.primary.main, color: theme.palette.common.white}}>Add Cat</Button>
+
+                    {statusMessage && (
+                    <Typography mt={2} color={statusMessage === 'Cat added!' ? 'success.main' : 'error.main'}>
+                        {statusMessage}
+                    </Typography>
+                    )}
                 </Box>
             </Box>
         </>
