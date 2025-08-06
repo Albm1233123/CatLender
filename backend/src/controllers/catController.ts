@@ -24,7 +24,6 @@ async function getCat(req: Request, res: Response): Promise<void> {
 }
 
 //add cats
-
 async function addCat(req: Request, res: Response): Promise<void> {
   try {
     const user = (req as any).user;
@@ -57,5 +56,26 @@ async function addCat(req: Request, res: Response): Promise<void> {
 }
 
 //remove cat
+async function deleteCat(req: Request, res: Response): Promise<void> {
+  try{
+    const user = (req as any).user;
 
-export { addCat, getCat};
+    const{ data, error } = await supabase
+      .from('cats')
+      .delete()
+      .eq('user_id', user.id)
+      .select()
+
+      if(error) {
+        console.error('Supbase deletetion error', error);
+        res.status(400).json({error: error.message });
+        return;
+      }
+
+      res.status(200).json({ cats: data});
+    } catch(error) {
+      res.status(500).json({ error: 'Server error '});
+    }
+  }
+
+export { addCat, getCat, deleteCat };

@@ -55,6 +55,33 @@ function CatsPage() {
     setCatForm(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleCatDeletion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatusMessage('');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/cats/addCat', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      if(response.ok) {
+        setCats(data.cats);
+        setStatusMessage('Cat deleted!');
+      
+      } else {
+        console.error("Failed to delete cats", data.error);
+      }
+    } catch(error) {
+      console.error('Error deleting cat:', error);
+      setStatusMessage('Error deleting cat');
+    }
+  }
+
   const handleCatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatusMessage('');
@@ -133,6 +160,7 @@ function CatsPage() {
                 <Typography>Gender: {selectedCat?.gender}</Typography>
               </Box>
               <CatSelector cats={cats} selectedCat={selectedCat} setSelectedCat={setSelectedCat} />
+              <Button onClick={handleCatDeletion}>Remove Cat</Button>
             </>
           )}
         </Box>
