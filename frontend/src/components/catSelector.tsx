@@ -2,6 +2,8 @@ import React from 'react';
 import { Select, MenuItem, Avatar, Typography, Box } from '@mui/material';
 
 type Cat = {
+
+  // change to string
   id: number;
   name: string;
   age: number;
@@ -21,7 +23,8 @@ function CatSelector({ cats, selectedCat, setSelectedCat }: CatSelectorProps) {
 
     // find selected cat object
     const handleChange = (event: any) => {
-        const selected = cats.find(cat => cat.id === Number(event.target.value));
+
+        const selected = cats.find(cat => cat.id === event.target.value);
         if (selected) setSelectedCat(selected);
     };
 
