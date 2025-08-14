@@ -7,6 +7,9 @@ import CatSelector from '../components/catSelector';
 
 import { Button, TextField, Typography, useTheme } from '@mui/material';
 
+// temp pfp
+import dogPlaceholder from '../assets/dogPlaceholder.png';
+
 function CatsPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -60,17 +63,23 @@ function CatsPage() {
     setStatusMessage('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/cats/addCat', {
+      const response = await fetch('http://localhost:3001/api/cats/deleteCat', {
         method: 'DELETE',
         headers: {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json',
         },
+          body: JSON.stringify({ catId: selectedCat.id })
       });
 
       const data = await response.json();
       if(response.ok) {
-        setCats(data.cats);
+        setCats(prevCats => {
+          const updatedCats = prevCats.filter(cat => cat.id !== selectedCat.id);
+          setSelectedCat(updatedCats.length > 0 ? updatedCats[0] : null);
+          return updatedCats;
+        });
+
         setStatusMessage('Cat deleted!');
       
       } else {
@@ -150,10 +159,11 @@ function CatsPage() {
             <>
               <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <img
-                  src={selectedCat?.avatar ?? ''}
+                  src={selectedCat?.avatar || dogPlaceholder}
                   alt={selectedCat?.name ?? 'No Cat'}
                   style={{ width: '60%', borderRadius: '8px' }}
-                />
+                />            
+                <Typography>placeholder pfp</Typography>
                 <Typography variant="h6" mt={2}>{selectedCat?.name}</Typography>
                 <Typography>Age: {selectedCat?.age}</Typography>
                 <Typography>Breed: {selectedCat?.breed}</Typography>

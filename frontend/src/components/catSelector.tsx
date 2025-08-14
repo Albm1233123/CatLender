@@ -23,7 +23,7 @@ function CatSelector({ cats, selectedCat, setSelectedCat }: CatSelectorProps) {
 
     // find selected cat object
     const handleChange = (event: any) => {
-
+ 
         const selected = cats.find(cat => cat.id === event.target.value);
         if (selected) setSelectedCat(selected);
     };

@@ -59,10 +59,17 @@ async function addCat(req: Request, res: Response): Promise<void> {
 async function deleteCat(req: Request, res: Response): Promise<void> {
   try{
     const user = (req as any).user;
+    const { catId } = req.body;
+
+    if (!catId) {
+      res.status(400).json({ error: 'Cat ID is required' });
+      return;
+    }
 
     const{ data, error } = await supabase
       .from('cats')
       .delete()
+      .eq('id', catId.id)
       .eq('user_id', user.id)
       .select()
 
