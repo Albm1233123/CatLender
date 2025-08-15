@@ -15,6 +15,7 @@ import {
 import {ArrowLeftOutlined, ArrowRightOutlined,Event, Dashboard, CalendarToday, Pets, } from '@mui/icons-material';
 import catsPage from '../pages/catsPage';
 import LandingPage from '../pages/landingPage';
+import EventsPage from '../pages/eventsPage';
 
 function SideBar() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function SideBar() {
   const menuItems = [
   { text: 'Dashboard', icon: <Dashboard />, path: '/LandingPage'},
   { text: 'Calender', icon: <CalendarToday /> },
-  { text: 'Events', icon: <Event /> },
+  { text: 'Events', icon: <Event />, path: '/eventsPage' },
   { text: 'Cats', icon: <Pets />, path: '/catsPage' },
 ];
 
