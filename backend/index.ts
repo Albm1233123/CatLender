@@ -5,6 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import userRoutes from './src/routes/userRoutes'
 import catRoutes from './src/routes/catRoutes';
+import eventRoutes from './src/routes/catEventRoutes'
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 // mounting routes
 app.use('/api/user', userRoutes);
 app.use('/api/cats', catRoutes);
+app.use('/api/events', eventRoutes);
 
 const PORT = process.env.PORT;
 

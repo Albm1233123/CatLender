@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, MenuItem, Avatar, Typography, Box } from '@mui/material';
 
-type Cat = {
+export type Cat = {
   id: number;
   name: string;
   age: number;

@@ -26,20 +26,49 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
   const [date, setDate] = useState("");
   const [type, setType] = useState("");
   const [note, setNote] = useState("");
+  const [statusMessage, setStatusMessage] = useState('');
 
   // Update selectedCat if cats change
   useEffect(() => {
     if (!selectedCat && cats.length > 0) setSelectedCat(cats[0]);
   }, [cats, selectedCat, setSelectedCat]);
 
-  const handleAddEvent = () => {
+  const handleAddEvent = async () => {
     if (!selectedCat) return;
-    onAddEvent(selectedCat.id, title, date, type, note);
-    setTitle("");
-    setDate("");
-    setType("");
-    setNote("");
-    onClose();
+
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await fetch('http://localhost:3001/api/events/addEvent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ 
+          catId: selectedCat.id,
+          title, 
+          date, 
+          type, 
+          notes: note 
+        }),
+      });
+
+      if (response.ok) {
+        setStatusMessage('Event added!');
+        setTitle('');
+        setDate('');
+        setType('');
+        setNote('');
+        onAddEvent?.(selectedCat.id, title, date, type, note);
+        onClose();
+      } else {
+        setStatusMessage('Event addition failed');
+      }
+    } catch (error) {
+      console.error('Error adding event:', error);
+      setStatusMessage('Error adding event');
+    }
   };
 
   return (
@@ -70,3 +99,4 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
 }
 
 export default EventModal;
+

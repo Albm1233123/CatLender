@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 // Components
 import NavBar from '../components/navbar';
 import SideBar from '../components/sidebar';
-import CatSelector from '../components/catSelector';
 import EventModal from '../components/eventModal';
 import CatEvents from '../components/events';
 import SearchBar from '../components/searchBar';
@@ -65,7 +64,7 @@ function EventsPage() {
     fetchCats();
   }, []);
 
-  // Add a new event
+// view event after modal post?
   const handleAddEvent = (catId: number, title: string, date: string, type: string, note?: string) => {
     if (!catId) return;
 
@@ -95,7 +94,7 @@ function EventsPage() {
         {/* Top controls: Add Event, Cat Selector, Search */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <Button variant="contained" onClick={() => setIsModalOpen(true)}>Add Event</Button>
-          
+
           <EventModal
             open={isModalOpen}
             onClose={() => setIsModalOpen(false)}
