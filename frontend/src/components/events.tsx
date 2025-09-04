@@ -2,17 +2,9 @@ import React from 'react';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { Box, Divider } from '@mui/material';
+import { CatEvent } from '../types/catEvent';
 
 dayjs.extend(isSameOrAfter);
-
-type CatEvent = {
-  id: number;
-  catId: number;
-  title: string;
-  date: string;
-  type: string;
-  notes?: string;
-};
 
 type EventsProp = {
   events: CatEvent[];

@@ -13,38 +13,41 @@ import CatEvents from '../components/events';
 import dogPlaceholder from '../assets/dogPlaceholder.png';
 import cat from '../assets/cat.png';
 import noSmile from '../assets/noSmile.png';
-import { Cat } from '../components/eventModal';
+import { Cat } from '../types/cat';
+import { CatEvent } from '../types/catEvent';
 
 // placeholder
-const dummyCats = [
-  { id: 1, name: 'Dog', age: 1, breed: 'Siamese', gender: 'cat', avatar: dogPlaceholder },
-  { id: 2, name: 'Mittens', age: 3, breed: 'Maine Coon', gender: 'female', avatar: cat },
-  { id: 3, name: 'KitKat', age: 2, breed: 'Bengal', gender: 'male', avatar: noSmile }
+const dummyCats: Cat[] = [
+  { id: "1", name: 'Dog', age: 1, breed: 'Siamese', gender: 'cat', avatar: dogPlaceholder },
+  { id: "2", name: 'Mittens', age: 3, breed: 'Maine Coon', gender: 'female', avatar: cat },
+  { id: "3", name: 'KitKat', age: 2, breed: 'Bengal', gender: 'male', avatar: noSmile }
 ];
 
-const dummyEvents = [
-    { id: 1, catId: 1, title: 'Vet Visit', date: '2025-07-08', type: 'Medical', notes: 'Annual checkup' },
-    { id: 2, catId: 2, title: 'Grooming', date: '2025-07-08', type: 'Care' },
-    { id: 3, catId: 3, title: 'Playdate', date: '2025-07-09', type: 'Fun' }
-  ];
+const dummyEvents: CatEvent[] = [
+  { id: "1", cat_id: "1", title: 'Vet Visit', date: '2025-07-08', type: 'Medical', notes: 'Annual checkup' },
+  { id: "2", cat_id: "2", title: 'Grooming', date: '2025-07-08', type: 'Care' },
+  { id: "3", cat_id: "3", title: 'Playdate', date: '2025-07-09', type: 'Fun' }
+];
 
-  const myEvents = [
-    {
-      id: 1,
-      catId: 1,
-      title: "Vet Visit",
-      date: "2025-07-10",
-      type: "Health",
-      notes: "Routine checkup"
-    },
-    {
-      id: 2,
-      catId: 2,
-      title: "Birthday",
-      date: "2025-08-01",
-      type: "Celebration"
-    }
-  ];
+
+const myEvents: CatEvent[] = [
+  {
+    id: "1",
+    cat_id: "1",
+    title: "Vet Visit",
+    date: "2025-07-10",
+    type: "Health",
+    notes: "Routine checkup"
+  },
+  {
+    id: "2",
+    cat_id: "2",
+    title: "Birthday",
+    date: "2025-08-01",
+    type: "Celebration"
+  }
+];
+
 
 
 function LandingPage() {
@@ -53,7 +56,7 @@ function LandingPage() {
     const [selectedCat, setSelectedCat] = useState<Cat | null>(dummyCats[0] ?? null);
     const navigate = useNavigate();
 
-    const filteredEvents = selectedCat ? dummyEvents.filter(event => event.catId === selectedCat.id) : [];
+    const filteredEvents = selectedCat ? dummyEvents.filter(event => event.cat_id === selectedCat.id) : [];
 
     // Check if user is logged in
     useEffect(() => {

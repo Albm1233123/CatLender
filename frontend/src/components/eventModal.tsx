@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import { Modal, Box, Button, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CatSelector from "../components/catSelector";
-
-export type Cat = {
-  id: number;
-  name: string;
-  age: number;
-  breed: string;
-  gender: string;
-  avatar: string;
-};
+import { Cat } from "../types/cat";
 
 interface EventModalProps {
   open: boolean;
@@ -18,17 +10,16 @@ interface EventModalProps {
   cats: Cat[];
   selectedCat: Cat | null;
   setSelectedCat: React.Dispatch<React.SetStateAction<Cat | null>>;
-  onAddEvent: (catId: number, title: string, date: string, type: string, note?: string) => void;
+  onAddEvent: (catId: string, title: string, date: string, type: string, note?: string) => void;
 }
 
 function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEvent }: EventModalProps) {
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10)); // default today
   const [type, setType] = useState("");
   const [note, setNote] = useState("");
-  const [statusMessage, setStatusMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState("");
 
-  // Update selectedCat if cats change
   useEffect(() => {
     if (!selectedCat && cats.length > 0) setSelectedCat(cats[0]);
   }, [cats, selectedCat, setSelectedCat]);
@@ -36,38 +27,45 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
   const handleAddEvent = async () => {
     if (!selectedCat) return;
 
-    const token = localStorage.getItem('token');
+    if (!title || !date || !type) {
+      setStatusMessage("Please fill in all required fields");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch('http://localhost:3001/api/events/addEvent', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/events/addEvent", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           catId: selectedCat.id,
-          title, 
-          date, 
-          type, 
-          notes: note 
+          title,
+          date,
+          type,
+          notes: note,
         }),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        setStatusMessage('Event added!');
-        setTitle('');
-        setDate('');
-        setType('');
-        setNote('');
-        onAddEvent?.(selectedCat.id, title, date, type, note);
+        setStatusMessage("Event added successfully!");
+        onAddEvent(selectedCat.id, title, date, type, note);
+        setTitle("");
+        setDate(new Date().toISOString().slice(0, 10));
+        setType("");
+        setNote("");
         onClose();
       } else {
-        setStatusMessage('Event addition failed');
+        setStatusMessage(result.error || "Event addition failed");
       }
     } catch (error) {
-      console.error('Error adding event:', error);
-      setStatusMessage('Error adding event');
+      console.error("Error adding event:", error);
+      setStatusMessage("Server error");
     }
   };
 
@@ -81,17 +79,19 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
           </IconButton>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {cats.length > 0 && selectedCat && (
             <CatSelector cats={cats} selectedCat={selectedCat} setSelectedCat={setSelectedCat} />
           )}
 
           <TextField label="Title" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth size="small" />
-          <TextField label="Date" value={date} onChange={(e) => setDate(e.target.value)} fullWidth size="small" />
+          <TextField label="Date" type="date" value={date} onChange={(e) => setDate(e.target.value)} fullWidth size="small" />
           <TextField label="Type" value={type} onChange={(e) => setType(e.target.value)} fullWidth size="small" />
           <TextField label="Note" value={note} onChange={(e) => setNote(e.target.value)} fullWidth size="small" />
 
           <Button variant="contained" onClick={handleAddEvent}>Add Event</Button>
+
+          {statusMessage && <Box sx={{ mt: 1, color: "red" }}>{statusMessage}</Box>}
         </Box>
       </Box>
     </Modal>
@@ -99,4 +99,3 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
 }
 
 export default EventModal;
-

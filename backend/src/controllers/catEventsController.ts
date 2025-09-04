@@ -1,57 +1,84 @@
 import { Request, Response } from "express";
 import { supabase } from "../lib/supabaseClient";
 
-// get event
-async function getEvent(req: Request, res: Response): Promise<void> {
-    try{
-        const cats = (req as any).cats;
-        
-        const { data, error } = await supabase
-            .from('cats')
-            .select('id, title, date, type, notes')
-            .eq('cat_id', cats.id)
-
-        if(error) {
-            console.error('Supabase fetch error:', error);
-            res.status(400).json({ error: error.message });
-            return;
-        }
-
-        res.status(200).json({ catEvents: data });
-    } catch(error) {
-        res.status(500).json({ error: 'Server error '});
-    }
+// Types
+interface CatEventBody {
+  catId: string;
+  title: string;
+  date: string;
+  type: string;
+  notes?: string;
 }
 
-// create event
-async function addEvent(req: Request, res: Response): Promise<void> {
+// Get events
+async function getEvent(req: Request, res: Response): Promise<void> {
   try {
-    const { catId, title, date, type, notes } = req.body;
-
-    console.log('Incoming body:', JSON.stringify({ catId, title, date, type, notes }));
-
-    if (!catId) return;
-
-    if (!catId || !title || !date || !type) {
-      res.status(400).json({ error: 'Please fill in all fields' });
-      return;
-    }
-
-    // issue may be uuid type, check ur types for each cat file, ensure they are matching
-    const formattedDate = new Date(date).toISOString();
+    const cats = (req as any).cats;
 
     const { data, error } = await supabase
       .from('catEvents')
-      .insert([{ cat_id: catId, title, date: formattedDate, type, notes }]);
+      .select('*')
+      .eq('cat_id', cats.id);
+
+    if (error) {
+      console.error('Supabase fetch error:', error);
+      res.status(400).json({ error: error.message });
+      return;
+    }
+
+    res.status(200).json({ catEvents: data });
+  } catch (error) {
+    console.error('Server error in getEvent:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
+// Create event
+async function addEvent(req: Request, res: Response): Promise<void> {
+  try {
+    console.log('Received body in addEvent:', req.body);
+    const { catId, title, date, type, notes }: CatEventBody = req.body;
+
+    if (!catId || !title || !date || !type) {
+      res.status(400).json({ error: 'Please fill in all required fields' });
+      return;
+    }
+
+    // Check cat exists
+    const { data: catCheck, error: catError } = await supabase
+      .from('cats')
+      .select('id')
+      .eq('id', catId)
+      .single();
+
+    if (catError || !catCheck) {
+      res.status(400).json({ error: 'Invalid catId, cat does not exist' });
+      return;
+    }
+
+    // Keep date as YYYY-MM-DD
+    const formattedDate = new Date(date).toISOString().split('T')[0];
+
+    const insertPayload = {
+      cat_id: catId,
+      title,
+      date: formattedDate,
+      type,
+      notes,
+    };
+
+    console.log('Insert payload:', insertPayload);
+
+    const { data, error } = await supabase
+      .from('catevents')
+      .insert([insertPayload])
+      .select(); 
+
+    console.log('Supabase insert returned data:', data);
 
     if (error) {
       console.error('Supabase insert error:', error);
-      console.log('catId', catId);
-      console.log('title', title);
-      console.log('date', date);
-      console.log('type', type);
-      console.log('notes', notes);
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message || 'Insert failed' });
       return;
     }
 
@@ -62,34 +89,37 @@ async function addEvent(req: Request, res: Response): Promise<void> {
   }
 }
 
-// delete event
+
+// Delete event
 async function deleteEvent(req: Request, res: Response): Promise<void> {
-    try{
-        const cats = (req as any).cats;
-        const { eventId } = req.body;
+  try {
+    const cats = (req as any).cats;
+    const { eventId } = req.body;
 
-        if(!eventId) {
-            res.status(400).json({ error: 'Event Id is needed '});
-            return;
-        }
-
-        const { data, error } = await supabase
-            .from('catEvents')
-            .delete()
-            .eq('id', eventId.id)
-            .eq('cat_id', cats.id)
-            .select()
-
-        if(error) {
-            console.error('Supabase deletion error', error);
-            res.status(400).json({ error: error.message });
-            return;
-        }
-        
-        res.status(200).json({ events: data});
-    } catch(error) {
-        res.status(500).json({ error: 'Server error' });
+    if (!eventId) {
+      res.status(400).json({ error: 'Event Id is needed' });
+      return;
     }
+
+
+    const { data, error } = await supabase
+      .from('catEvents')
+      .delete()
+      .eq('id', eventId)
+      .eq('cat_id', cats.id)
+      .select();
+
+    if (error) {
+      console.error('Supabase deletion error:', error);
+      res.status(400).json({ error: error.message });
+      return;
+    }
+
+    res.status(200).json({ events: data });
+  } catch (error) {
+    console.error('Server error in deleteEvent:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
 }
 
 export { getEvent, addEvent, deleteEvent };

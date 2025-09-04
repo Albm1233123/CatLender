@@ -1,14 +1,6 @@
 import React from 'react';
 import { Select, MenuItem, Avatar, Typography, Box } from '@mui/material';
-
-export type Cat = {
-  id: number;
-  name: string;
-  age: number;
-  breed: string;
-  gender: string;
-  avatar: string;
-};
+import { Cat } from "../types/cat";
 
 type CatSelectorProps = {
   cats: Cat[];

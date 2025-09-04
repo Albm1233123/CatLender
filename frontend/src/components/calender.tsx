@@ -4,21 +4,14 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import { CatEvent } from '../types/catEvent';
+import { CalendarProps } from 'react-calendar';
 
-type CatEvent = {
-  id: number;
-  catId: number;
-  title: string;
-  date: string;
-  type: string;
-  notes?: string;
-};
-
-type CalendarProps = {
+interface CatCalendarProps {
   events: CatEvent[];
-};
+}
 
-function CatCalendar({ events }: CalendarProps) {
+function CatCalendar({ events }: CatCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const formattedSelectedDate = selectedDate.format('YYYY-MM-DD');
 

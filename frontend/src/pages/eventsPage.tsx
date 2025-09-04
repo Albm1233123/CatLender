@@ -10,16 +10,8 @@ import CatEvents from '../components/events';
 import SearchBar from '../components/searchBar';
 
 // Types
-import { Cat } from '../components/eventModal';
-
-interface Event {
-  id: number;
-  catId: number;
-  title: string;
-  date: string;
-  type: string;
-  notes?: string;
-}
+import { Cat } from '../types/cat';
+import { CatEvent } from '../types/catEvent';
 
 function EventsPage() {
   const navigate = useNavigate();
@@ -29,7 +21,7 @@ function EventsPage() {
   const [firstName, setFirstName] = useState('');
   const [cats, setCats] = useState<Cat[]>([]);
   const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<CatEvent[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch cats from backend
@@ -65,15 +57,14 @@ function EventsPage() {
   }, []);
 
 // view event after modal post?
-  const handleAddEvent = (catId: number, title: string, date: string, type: string, note?: string) => {
+  const handleAddEvent = (catId: string, title: string, date: string, type: string, note?: string) => {
     if (!catId) return;
-
-    // post thing
+    // post event logic here
   };
 
   // create categories for filtered cats or all events
   // Filter events for currently selected cat
-  const filteredEvents = selectedCat ? events.filter(e => e.catId === selectedCat.id) : [];
+    const filteredEvents = selectedCat ? events.filter(e => e.cat_id === selectedCat.id) : [];
 
   const handleLogout = () => {
     localStorage.clear();
