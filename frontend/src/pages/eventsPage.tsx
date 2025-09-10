@@ -48,23 +48,43 @@ function EventsPage() {
     }
   };
 
+  const fetchEvents = async () => {
+    if (!token) return;
+
+    try {
+      const response = await fetch('http://localhost:3001/api/events/getEvent', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+         setEvents(data.catEvents ?? []);
+      } else {
+         setEvents(data.catEvents);
+      }
+    } catch(error) {
+       console.error('Error fetching Events:', error);
+    }
+  }
+
   useEffect(() => {
     const name = localStorage.getItem('firstName');
     if (token) setIsLoggedIn(true);
     if (name) setFirstName(name);
 
     fetchCats();
+    fetchEvents();
   }, []);
 
-// view event after modal post?
-  const handleAddEvent = (catId: string, title: string, date: string, type: string, note?: string) => {
-    if (!catId) return;
-    // post event logic here
-  };
-
-  // create categories for filtered cats or all events
-  // Filter events for currently selected cat
-    const filteredEvents = selectedCat ? events.filter(e => e.cat_id === selectedCat.id) : [];
+  // show events on cat selection
+  const filteredEvents = selectedCat 
+  ? (events ?? []).filter(e => String(e.cat_id) === String(selectedCat.id)) 
+  : [];
 
   const handleLogout = () => {
     localStorage.clear();
@@ -92,7 +112,6 @@ function EventsPage() {
             cats={cats}
             selectedCat={selectedCat}
             setSelectedCat={setSelectedCat}
-            onAddEvent={handleAddEvent}
           />
 
           <Box sx={{ width: '300px' }}>

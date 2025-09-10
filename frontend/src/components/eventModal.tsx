@@ -10,7 +10,7 @@ interface EventModalProps {
   cats: Cat[];
   selectedCat: Cat | null;
   setSelectedCat: React.Dispatch<React.SetStateAction<Cat | null>>;
-  onAddEvent: (catId: string, title: string, date: string, type: string, note?: string) => void;
+  onAddEvent?: (catId: string, title: string, date: string, type: string, note?: string) => void;
 }
 
 function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEvent }: EventModalProps) {
@@ -54,7 +54,9 @@ function EventModal({ open, onClose, cats, selectedCat, setSelectedCat, onAddEve
 
       if (response.ok) {
         setStatusMessage("Event added successfully!");
-        onAddEvent(selectedCat.id, title, date, type, note);
+        if (onAddEvent) {
+          onAddEvent(selectedCat.id, title, date, type, note);
+        }
         setTitle("");
         setDate(new Date().toISOString().slice(0, 10));
         setType("");

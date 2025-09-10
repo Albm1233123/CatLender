@@ -13,12 +13,10 @@ interface CatEventBody {
 // Get events
 async function getEvent(req: Request, res: Response): Promise<void> {
   try {
-    const cats = (req as any).cats;
 
     const { data, error } = await supabase
-      .from('catEvents')
+      .from('catevents')
       .select('*')
-      .eq('cat_id', cats.id);
 
     if (error) {
       console.error('Supabase fetch error:', error);
@@ -101,9 +99,8 @@ async function deleteEvent(req: Request, res: Response): Promise<void> {
       return;
     }
 
-
     const { data, error } = await supabase
-      .from('catEvents')
+      .from('catevents')
       .delete()
       .eq('id', eventId)
       .eq('cat_id', cats.id)
