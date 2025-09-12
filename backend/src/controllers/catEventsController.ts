@@ -91,7 +91,6 @@ async function addEvent(req: Request, res: Response): Promise<void> {
 // Delete event
 async function deleteEvent(req: Request, res: Response): Promise<void> {
   try {
-    const cats = (req as any).cats;
     const { eventId } = req.body;
 
     if (!eventId) {
@@ -103,7 +102,6 @@ async function deleteEvent(req: Request, res: Response): Promise<void> {
       .from('catevents')
       .delete()
       .eq('id', eventId)
-      .eq('cat_id', cats.id)
       .select();
 
     if (error) {

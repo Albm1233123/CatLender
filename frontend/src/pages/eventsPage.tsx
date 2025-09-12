@@ -33,7 +33,7 @@ function EventsPage() {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        },
+        }
       });
 
       const data = await response.json();
@@ -71,6 +71,33 @@ function EventsPage() {
        console.error('Error fetching Events:', error);
     }
   }
+
+  const deleteEvents = async (eventId: string) => {
+    if (!token) return;
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/events/deleteEvent', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ eventId })
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        // this may be an issue/ sets all events to null
+         setEvents(data.catEvents ?? []);
+      } else {
+         console.error('Failed to delete event:', data.error);
+      }
+    } catch(error) {
+       console.error('Error fetching Events:', error);
+    }
+  }
+
 
   useEffect(() => {
     const name = localStorage.getItem('firstName');
@@ -122,7 +149,7 @@ function EventsPage() {
         {/* Upcoming Events */}
         <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '50%' }}>
           <h3>Upcoming Events</h3>
-          <CatEvents events={filteredEvents} />
+          <CatEvents events={filteredEvents} onDelete={deleteEvents}/>
         </Box>
       </Box>
     </>

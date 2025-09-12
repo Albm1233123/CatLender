@@ -128,7 +128,8 @@ function LandingPage() {
                 {/* Events */}
                 <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
                     Upcoming events
-                    <CatEvents events={myEvents} />
+                    <CatEvents events={myEvents} 
+                    onDelete={() => {}}/>
                 </Box>
 
                 {/* Other cats or something else */}
