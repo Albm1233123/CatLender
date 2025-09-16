@@ -24,6 +24,9 @@ function EventsPage() {
   const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
   const [events, setEvents] = useState<CatEvent[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Search bar
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch cats from backend
   const fetchCats = async () => {
@@ -109,9 +112,9 @@ function EventsPage() {
   }, []);
 
   // show events on cat selection
-  const filteredEvents = selectedCat 
-  ? (events ?? []).filter(e => String(e.cat_id) === String(selectedCat.id)) 
-  : [];
+  const filteredEvents = events
+    .filter(e => selectedCat ? String(e.cat_id) === String(selectedCat.id) : true)
+    .filter(e => e.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleLogout = () => {
     localStorage.clear();
@@ -142,7 +145,7 @@ function EventsPage() {
           />
 
           <Box sx={{ width: '300px' }}>
-            <SearchBar onSearch={() => {}} />
+            <SearchBar onSearch={setSearchTerm} />
           </Box>
         </Box>
 
