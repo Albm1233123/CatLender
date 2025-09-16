@@ -8,6 +8,7 @@ import SideBar from '../components/sidebar';
 import EventModal from '../components/eventModal';
 import CatEvents from '../components/events';
 import SearchBar from '../components/searchBar';
+import CatSelector from "../components/catSelector";
 
 // Types
 import { Cat } from '../types/cat';
@@ -88,8 +89,7 @@ function EventsPage() {
       const data = await response.json();
 
       if(response.ok) {
-        // this may be an issue/ sets all events to null
-         setEvents(data.catEvents ?? []);
+         setEvents(prevEvents => prevEvents.filter(e => e.id !== eventId));
       } else {
          console.error('Failed to delete event:', data.error);
       }
@@ -132,7 +132,7 @@ function EventsPage() {
         {/* Top controls: Add Event, Cat Selector, Search */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <Button variant="contained" onClick={() => setIsModalOpen(true)}>Add Event</Button>
-
+          <CatSelector cats={cats} selectedCat={selectedCat} setSelectedCat={setSelectedCat} />
           <EventModal
             open={isModalOpen}
             onClose={() => setIsModalOpen(false)}
