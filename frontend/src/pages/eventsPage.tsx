@@ -100,7 +100,12 @@ function EventsPage() {
        console.error('Error fetching Events:', error);
     }
   }
-
+  
+  // Lift state (no refresh)
+  const handleEventAdded = (catId: string, title: string, date: string, type: string, note?: string) => {
+    const newEvent = { id: Date.now().toString(), cat_id: catId, title, date, type, notes: note };
+    setEvents(prev => [...prev, newEvent]);
+  };
 
   useEffect(() => {
     const name = localStorage.getItem('firstName');
@@ -142,6 +147,7 @@ function EventsPage() {
             cats={cats}
             selectedCat={selectedCat}
             setSelectedCat={setSelectedCat}
+             onAddEvent={handleEventAdded}
           />
 
           <Box sx={{ width: '300px' }}>
