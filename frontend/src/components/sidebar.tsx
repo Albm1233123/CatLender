@@ -16,6 +16,8 @@ import {ArrowLeftOutlined, ArrowRightOutlined,Event, Dashboard, CalendarToday, P
 import catsPage from '../pages/catsPage';
 import LandingPage from '../pages/landingPage';
 import EventsPage from '../pages/eventsPage';
+import CalenderPage from '../pages/calenderPage';
+
 
 function SideBar() {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ function SideBar() {
 
   const menuItems = [
   { text: 'Dashboard', icon: <Dashboard />, path: '/LandingPage'},
-  { text: 'Calender', icon: <CalendarToday /> },
+  { text: 'Calender', icon: <CalendarToday />, path: '/CalenderPage' },
   { text: 'Events', icon: <Event />, path: '/eventsPage' },
   { text: 'Cats', icon: <Pets />, path: '/catsPage' },
 ];
