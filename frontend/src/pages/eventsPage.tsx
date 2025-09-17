@@ -9,6 +9,7 @@ import EventModal from '../components/eventModal';
 import CatEvents from '../components/events';
 import SearchBar from '../components/searchBar';
 import CatSelector from "../components/catSelector";
+import CatCalendar from '../components/calender';
 
 // Types
 import { Cat } from '../types/cat';
@@ -155,10 +156,36 @@ function EventsPage() {
           </Box>
         </Box>
 
-        {/* Upcoming Events */}
-        <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1, width: '50%' }}>
-          <h3>Upcoming Events</h3>
-          <CatEvents events={filteredEvents} onDelete={deleteEvents}/>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 10,
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            mt: 4,
+          }}
+            >
+          {/* Calendar */}
+          <Box sx={{ flex: '1 1 400px', maxWidth: 500 }}>
+            <CatCalendar events={events} />
+          </Box>
+
+          {/* Upcoming Events */}
+          <Box
+            sx={{
+              flex: '1 1 300px', 
+              p: 2, 
+              bgcolor: 'background.paper', 
+              borderRadius: 1, 
+              maxWidth: 400,
+              height: 600,
+              overflowY: 'auto', 
+              overflowX: 'hidden', 
+            }}
+          >
+            <h3>Upcoming Events</h3>
+            <CatEvents events={filteredEvents} onDelete={deleteEvents} />
+          </Box>
         </Box>
       </Box>
     </>

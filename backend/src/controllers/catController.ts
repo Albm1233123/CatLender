@@ -69,7 +69,7 @@ async function deleteCat(req: Request, res: Response): Promise<void> {
     const{ data, error } = await supabase
       .from('cats')
       .delete()
-      .eq('id', catId.id)
+      .eq('id', catId)
       .eq('user_id', user.id)
       .select()
 
