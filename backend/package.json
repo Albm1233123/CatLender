@@ -6,6 +6,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "pg": "^8.16.0"
   },
   "devDependencies": {
@@ -14,6 +15,7 @@
     "@types/express": "^5.0.3",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^2.0.0",
     "@types/node": "^22.15.30",
     "@types/supertest": "^6.0.3",
     "eslint": "^9.28.0",

@@ -4,6 +4,7 @@ import NavBar from '../components/navbar';
 import SideBar from '../components/sidebar';
 import { useNavigate } from 'react-router-dom';
 import CatSelector from '../components/catSelector';
+import UploadPhoto from '../components/photoUploader';
 
 import { Button, TextField, Typography, useTheme } from '@mui/material';
 
@@ -147,8 +148,8 @@ function CatsPage() {
           mx: 'auto',
         }}
       >
-        {/* Cat profile and selector */}
-        <Box sx={{ flex: '1 1 100px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
+        {/* Cat profile*/}
+        <Box sx={{ flex: '1 1 100px', p: 2, bgcolor: 'background.paper', borderRadius: 1, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'}}>
           <Typography variant="h6" gutterBottom>Cat object selection</Typography>
 
           {cats.length === 0 ? (
@@ -162,21 +163,45 @@ function CatsPage() {
                   src={selectedCat?.avatar || dogPlaceholder}
                   alt={selectedCat?.name ?? 'No Cat'}
                   style={{ width: '60%', borderRadius: '8px' }}
-                />            
-                <Typography>placeholder pfp</Typography>
+                /> 
+                <UploadPhoto catId={selectedCat.id} currentPhotoUrl={selectedCat.photo_url} />
                 <Typography variant="h6" mt={2}>{selectedCat?.name}</Typography>
                 <Typography>Age: {selectedCat?.age}</Typography>
                 <Typography>Breed: {selectedCat?.breed}</Typography>
                 <Typography>Gender: {selectedCat?.gender}</Typography>
               </Box>
-              <CatSelector cats={cats} selectedCat={selectedCat} setSelectedCat={setSelectedCat} />
-              <Button onClick={handleCatDeletion}>Remove Cat</Button>
+        
+          {/* Cat Selector*/}
+          <Box sx={{ mt: 15 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+              <CatSelector 
+                cats={cats} 
+                selectedCat={selectedCat} 
+                setSelectedCat={setSelectedCat} 
+              />
+            </Box>
+            <Button onClick={handleCatDeletion}>Remove Cat</Button>
+          </Box>
             </>
           )}
         </Box>
+        
+         {/* Middle box*/}
+        <Box
+          sx={{
+            height: 800,
+            width: 400,
+            bgcolor: 'background.paper',
+            justifyContent: 'center',
+            borderRadius: 1, 
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+
+        </Box>
 
         {/* Cat form */}
-        <Box sx={{ flex: '1 1 300px', p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
+        <Box sx={{ flex: '1 1 100px', p: 2, bgcolor: 'background.paper', borderRadius: 1, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'}}>
           <Typography variant="h6" gutterBottom>Cat form</Typography>
           <TextField label="Enter Name" name="name" value={catForm.name} onChange={handleCatFormChange} fullWidth margin="dense" />
           <TextField label="Enter Age" name="age" value={catForm.age} onChange={handleCatFormChange} fullWidth margin="dense" />
