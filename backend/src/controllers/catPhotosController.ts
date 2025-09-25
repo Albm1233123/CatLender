@@ -4,17 +4,18 @@ import multer from "multer";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-async function getPhoto(req: Request, res: Response): Promise<void> {
-    // ya ya get photo
-}
-
 // upload photo
-export const uploadPhoto = [
+const uploadPhoto = [
   upload.single("file"), 
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async (req: Request, res: Response): Promise<void> => {
     try {
-      const catId = req.params.catId as string;
+      const catId = req.params.id as string;
       const file = req.file;
+
+      console.log("=== Upload attempt ===");
+      console.log("catId:", catId);
+      console.log("file object:", file);
+      console.log("file.buffer length:", file?.buffer?.length);
 
       if (!catId) {
         res.status(400).json({ error: "catId is required" });
@@ -53,3 +54,5 @@ export const uploadPhoto = [
     }
   },
 ];
+
+export { uploadPhoto};

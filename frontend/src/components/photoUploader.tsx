@@ -4,12 +4,14 @@ import React, { useState } from "react";
 interface UploadPhotoProps {
   catId: string;
   currentPhotoUrl?: string;
+  onUploadSuccess?: (newUrl: string) => void; 
 }
 
-const UploadPhoto: React.FC<UploadPhotoProps> = ({ catId, currentPhotoUrl }) => {
+const UploadPhoto: React.FC<UploadPhotoProps> = ({ catId, currentPhotoUrl, onUploadSuccess}) => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>(currentPhotoUrl || "");
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('token');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -27,14 +29,20 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({ catId, currentPhotoUrl }) => 
     formData.append("file", file);
 
     try {
-      const res = await fetch(`http://localhost:3001/cats/${catId}/photo`, {
+      const res = await fetch(`http://localhost:3001/api/cats/photo/${catId}`, {
         method: "POST",
         body: formData,
       });
 
       const data = await res.json();
       if (data.url) {
-        setPreview(data.url);
+        const freshUrl = `${data.url}?t=${Date.now()}`;
+        setPreview(freshUrl);
+
+        if (onUploadSuccess) {
+          onUploadSuccess(freshUrl);
+        }
+
         alert("Upload successful!");
       } else {
         alert("Upload failed");
@@ -46,8 +54,6 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({ catId, currentPhotoUrl }) => 
       setLoading(false);
     }
   };
-
-  //update photo pfp
 
   return (
     <div style={{ textAlign: "center" }}>

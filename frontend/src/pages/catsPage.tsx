@@ -160,11 +160,24 @@ function CatsPage() {
             <>
               <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <img
-                  src={selectedCat?.avatar || dogPlaceholder}
+                  src={selectedCat?.photo_url ? `${selectedCat.photo_url}?t=${Date.now()}` : dogPlaceholder}
                   alt={selectedCat?.name ?? 'No Cat'}
                   style={{ width: '60%', borderRadius: '8px' }}
-                /> 
-                <UploadPhoto catId={selectedCat.id} currentPhotoUrl={selectedCat.photo_url} />
+                />
+
+                <UploadPhoto
+                  catId={selectedCat.id}
+                  currentPhotoUrl={selectedCat.photo_url}
+                  onUploadSuccess={(newUrl) => {
+                    setSelectedCat((prev: any) => prev ? { ...prev, photo_url: newUrl } : null);
+                    setCats(prevCats =>
+                      prevCats.map(cat =>
+                        cat.id === selectedCat.id ? { ...cat, photo_url: newUrl } : cat
+                      )
+                    );
+                  }}
+                />
+
                 <Typography variant="h6" mt={2}>{selectedCat?.name}</Typography>
                 <Typography>Age: {selectedCat?.age}</Typography>
                 <Typography>Breed: {selectedCat?.breed}</Typography>

@@ -4,8 +4,9 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import userRoutes from './src/routes/userRoutes'
-import catRoutes from './src/routes/catRoutes';
+import catRoutes from './src/routes/catRoutes'
 import eventRoutes from './src/routes/catEventRoutes'
+import catPhotoRoutes from'./src/routes/catPhotoRoutes'
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/cats', catRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/cats/photo', catPhotoRoutes);
 
 const PORT = process.env.PORT;
 
